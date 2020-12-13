@@ -13,9 +13,9 @@ class EyeColor
         'brown' => self::COLOR_BROWN,
     ];
 
-    private const COLOR_BLUE = 'blue';
-    private const COLOR_GREEN = 'green';
-    private const COLOR_BROWN = 'brown';
+    public const COLOR_BLUE = 'blue';
+    public const COLOR_GREEN = 'green';
+    public const COLOR_BROWN = 'brown';
 
     public static function hasColor(string $color): bool
     {
