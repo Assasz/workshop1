@@ -2,7 +2,7 @@
 
 namespace App;
 
-class ChristmasSound implements Sound
+final class ChristmasSound implements Sound
 {
     public function play(): void
     {

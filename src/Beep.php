@@ -2,7 +2,7 @@
 
 namespace App;
 
-class Beep implements Sound
+final class Beep implements Sound
 {
     public function play(): void
     {

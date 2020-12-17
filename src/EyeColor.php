@@ -2,23 +2,36 @@
 
 namespace App;
 
-class EyeColor
+final class EyeColor
 {
-    /**
-     * @var string[]
-     */
-    private const COLORS = [
-        'blue' => self::COLOR_BLUE,
-        'green' => self::COLOR_GREEN,
-        'brown' => self::COLOR_BROWN,
-    ];
+    private string $value;
 
-    public const COLOR_BLUE = 'blue';
-    public const COLOR_GREEN = 'green';
-    public const COLOR_BROWN = 'brown';
+    private const COLOR_BLUE = 'blue';
+    private const COLOR_GREEN = 'green';
+    private const COLOR_BROWN = 'brown';
 
-    public static function hasColor(string $color): bool
+    public static function blue(): self
     {
-        return array_key_exists($color, self::COLORS);
+        return new self(self::COLOR_BLUE);
+    }
+
+    public static function green(): self
+    {
+        return new self(self::COLOR_GREEN);
+    }
+
+    public static function brown(): self
+    {
+        return new self(self::COLOR_BROWN);
+    }
+
+    public function __toString(): string
+    {
+        return $this->value;
+    }
+
+    private function __construct(string $value)
+    {
+        $this->value = $value;
     }
 }

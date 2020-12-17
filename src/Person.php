@@ -4,15 +4,16 @@ namespace App;
 
 final class Person implements HeavyObject
 {
-    private string $eyeColor;
+    private string $name;
+    private EyeColor $eyeColor;
     private int $weight;
 
-    public function __construct(string $eyeColor, int $weight)
-    {
-        if (!EyeColor::hasColor($eyeColor)) {
-            throw new \InvalidArgumentException('Podany nieprawidłowy kolor oczu.');
-        }
-
+    public function __construct(
+        string $name,
+        EyeColor $eyeColor,
+        int $weight
+    ) {
+        $this->name = $name;
         $this->eyeColor = $eyeColor;
         $this->weight = $weight;
     }
@@ -22,13 +23,8 @@ final class Person implements HeavyObject
         return $this->weight;
     }
 
-    public function getEyeColor(): string
-    {
-        return $this->eyeColor;
-    }
-
     public function __toString(): string
     {
-        return "Mam kolor oczu {$this->eyeColor} oraz wage {$this->weight}" . PHP_EOL;
+        return "Nazywam się {$this->name}, mam kolor oczu {$this->eyeColor} oraz wage {$this->weight}" . PHP_EOL;
     }
 }

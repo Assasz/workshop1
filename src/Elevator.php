@@ -2,14 +2,12 @@
 
 namespace App;
 
-class Elevator
+final class Elevator
 {
     private const WEIGHT_LIMIT = 500;
 
     /** @var HeavyObject[] */
     private array $objects;
-
-    private int $weightTotal = 0;
 
     private ChristmasSound $christmasSound;
     private Beep $beep;
@@ -22,23 +20,29 @@ class Elevator
         $this->beep = $beep;
     }
 
-    public function selectFloor(int $floor): void
+    public function selectFloor(int $floor): self
     {
         $this->selectedFloor = $floor;
+
+        return $this;
     }
 
-    public function enter(HeavyObject $object): void
+    public function enter(HeavyObject ...$objects): self
     {
         echo 'Otwarto drzwi' . PHP_EOL;
 
-        $this->weightTotal += $object->getWeigh();
+        foreach ($objects as $object) {
+            $this->objects[] = $object;
+        }
 
         $this->christmasSound->play();
+
+        return $this;
     }
 
     public function run(): void
     {
-        if ($this->weightTotal > self::WEIGHT_LIMIT) {
+        if ($this->getWeightTotal() > self::WEIGHT_LIMIT) {
             throw ElevatorException::overweighted();
         }
 
@@ -48,10 +52,19 @@ class Elevator
 
         echo "Winda rusza na piętro {$this->selectedFloor}!" . PHP_EOL;
 
-        sleep(3);
+        sleep($this->selectedFloor);
 
         echo 'Winda dotarła na miejsce!' . PHP_EOL;
 
         $this->beep->play();
+    }
+
+    private function getWeightTotal(): int
+    {
+        return array_reduce(
+            $this->objects,
+            static fn(int $weightTotal, HeavyObject $object): int => $weightTotal += $object->getWeigh(),
+            0,
+        );
     }
 }
