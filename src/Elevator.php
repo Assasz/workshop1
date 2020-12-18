@@ -12,16 +12,46 @@ final class Elevator
     private ChristmasSound $christmasSound;
     private Beep $beep;
 
-    private ?int $selectedFloor = null;
+    private HelpButton $helpButton;
+    private TurboButton $turboButton;
 
-    public function __construct(ChristmasSound $christmasSound, Beep $beep)
-    {
+    private FloorCollection $floors;
+    private ?Floor $selectedFloor = null;
+
+    public function __construct(
+        ChristmasSound $christmasSound,
+        Beep $beep,
+        HelpButton $helpButton,
+        TurboButton $turboButton,
+        FloorCollection $floors
+    ) {
         $this->christmasSound = $christmasSound;
         $this->beep = $beep;
+        $this->helpButton = $helpButton;
+        $this->turboButton = $turboButton;
+        $this->floors = $floors;
     }
 
-    public function selectFloor(int $floor): self
+    public function clickHelpButton(): self
     {
+        $this->helpButton->click();
+
+        return $this;
+    }
+
+    public function clickTurboButton(): self
+    {
+        $this->turboButton->click();
+
+        return $this;
+    }
+
+    public function selectFloor(Floor $floor): self
+    {
+        if (!$this->floors->hasFloor($floor)) {
+            throw ElevatorException::floorOutOfRange($floor);
+        }
+
         $this->selectedFloor = $floor;
 
         return $this;
@@ -50,13 +80,19 @@ final class Elevator
             throw ElevatorException::floorNotSelected();
         }
 
-        echo "Winda rusza na piętro {$this->selectedFloor}!" . PHP_EOL;
+        try {
+            echo "Winda rusza na piętro {$this->selectedFloor}!" . PHP_EOL;
 
-        sleep($this->selectedFloor);
+            sleep($this->turboButton->isActivated() ? $this->selectedFloor->get() / 2 : $this->selectedFloor->get());
 
-        echo 'Winda dotarła na miejsce!' . PHP_EOL;
+            echo 'Winda dotarła na miejsce!' . PHP_EOL;
 
-        $this->beep->play();
+            $this->beep->play();
+        } catch (\Throwable $throwable) {
+            $this->clickHelpButton();
+
+            echo 'Awaryjne lądowanie' . PHP_EOL;
+        }
     }
 
     private function getWeightTotal(): int

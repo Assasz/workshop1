@@ -17,4 +17,11 @@ final class ElevatorException extends \RuntimeException
             'Nie wybrano piętra!'
         );
     }
+
+    public static function floorOutOfRange(Floor $floor): self
+    {
+        return new self(
+            "Wybrane piętro {$floor} jest nieprawidłowe!"
+        );
+    }
 }

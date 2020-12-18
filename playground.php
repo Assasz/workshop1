@@ -5,13 +5,12 @@ use App\ChristmasSound;
 use App\Elevator;
 use App\EyeColor;
 use App\Person;
+use App\HelpButton;
+use App\TurboButton;
+use App\Floor;
+use App\FloorCollection;
 
 require __DIR__ . '/vendor/autoload.php';
-
-$elevator = new Elevator(
-    new ChristmasSound(),
-    new Beep(),
-);
 
 $kazmir = new Person(
     'Kazmir',
@@ -27,7 +26,17 @@ $assasz = new Person(
 echo $kazmir;
 echo $assasz;
 
+$elevator = new Elevator(
+    new ChristmasSound(),
+    new Beep(),
+    new HelpButton(),
+    new TurboButton(),
+    FloorCollection::create(10),
+);
+
 $elevator
     ->enter($kazmir, $assasz)
-    ->selectFloor(2)
+    ->selectFloor(new Floor(4))
+    ->clickTurboButton()
+    ->clickHelpButton()
     ->run();
