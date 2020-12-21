@@ -74,35 +74,31 @@ final class Elevator
 
     public function run(): void
     {
-        if ($this->getWeightTotal() > self::WEIGHT_LIMIT) {
-            throw ElevatorException::overweighted();
-        }
+        $this->ensureIsNotOverweighted();
 
         if ($this->selectedFloor === null) {
             throw ElevatorException::floorNotSelected();
         }
 
-        try {
-            echo "Winda rusza na piętro {$this->selectedFloor}!" . PHP_EOL;
+        echo "Winda rusza na piętro {$this->selectedFloor}!" . PHP_EOL;
 
-            sleep($this->turboButton->isActivated() ? $this->selectedFloor->get() / 2 : $this->selectedFloor->get());
+        sleep($this->turboButton->isActivated() ? $this->selectedFloor->get() / 2 : $this->selectedFloor->get());
 
-            echo 'Winda dotarła na miejsce!' . PHP_EOL;
+        echo 'Winda dotarła na miejsce!' . PHP_EOL;
 
-            $this->beep->play();
-        } catch (\Throwable $throwable) {
-            $this->clickHelpButton();
-
-            echo 'Awaryjne lądowanie' . PHP_EOL;
-        }
+        $this->beep->play();
     }
 
-    private function getWeightTotal(): int
+    private function ensureIsNotOverweighted(): void
     {
-        return array_reduce(
+        $totalWeight = array_reduce(
             $this->objects,
             static fn(int $weightTotal, HeavyObject $object): int => $weightTotal += $object->getWeigh(),
             0,
         );
+
+        if ($totalWeight > self::WEIGHT_LIMIT) {
+            throw ElevatorException::overweighted();
+        }
     }
 }
