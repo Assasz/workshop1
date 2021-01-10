@@ -6,8 +6,15 @@ namespace App;
 
 final class HelpButton
 {
+    private Janitor $janitor;
+
+    public function __construct(Janitor $janitor)
+    {
+        $this->janitor = $janitor;
+    }
+
     public function click(): void
     {
-        (new Janitor())->help();
+       $this->janitor->help();
     }
 }

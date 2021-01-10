@@ -9,6 +9,7 @@ use App\HelpButton;
 use App\TurboButton;
 use App\Floor;
 use App\FloorCollection;
+use App\Janitor;
 
 require __DIR__ . '/vendor/autoload.php';
 
@@ -29,7 +30,7 @@ echo $assasz;
 $elevator = new Elevator(
     new ChristmasSound(),
     new Beep(),
-    new HelpButton(),
+    new HelpButton(new Janitor()),
     new TurboButton(),
     FloorCollection::create(10),
 );
