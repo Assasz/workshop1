@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App;
 
-final class ChristmasSound implements Sound
+final class ChristmasSound
 {
     public function play(): void
     {
